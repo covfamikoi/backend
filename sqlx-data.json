@@ -1,0 +1,24 @@
+{
+  "db": "PostgreSQL",
+  "b2994b050d88ce7803a6605bdff8aa619a059c0421bb7ba2d0dbc6e4d3c06626": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": "Int4"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "insert into admins (username, password_hash) values ($1, $2) returning id"
+  }
+}
