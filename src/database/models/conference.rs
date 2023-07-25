@@ -6,7 +6,6 @@ pub struct Conference {
     pub id: i32,
 
     pub title: String,
-    pub info: String,
     pub password: Option<String>,
     // Option::None => private, probably a preset, only visible to admins with access
     // Option::Some(_) => public
@@ -71,11 +70,10 @@ impl Conference {
     pub async fn update(&self, db: &DbClient) -> sqlx::Result<sqlx::postgres::PgQueryResult> {
         sqlx::query!(
             "update conferences set
-            title=$1, info=$2, password=$3, start_ts=$4, end_ts=$5, top_left_lat=$6,
-            top_left_lon=$7, width_in_tiles=$8, height_in_tiles=$9, admins=$10
-            where id=$11",
+            title=$1, password=$2, start_ts=$3, end_ts=$4, top_left_lat=$5,
+            top_left_lon=$6, width_in_tiles=$7, height_in_tiles=$8, admins=$9
+            where id=$10",
             self.title,
-            self.info,
             self.password,
             self.start_ts,
             self.end_ts,

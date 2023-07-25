@@ -7,9 +7,9 @@ use crate::{
 };
 
 #[get("/conferences/list/public")]
-pub async fn get_public_conferences(db: &State<DbClient>) -> Result<Json<Vec<String>>, Status> {
+pub async fn get_public_conferences(db: &State<DbClient>) -> Result<Json<Vec<(i32, String)>>, Status> {
     match Conference::get_public_upcoming(db).await {
-        Ok(events) => Ok(Json(events.into_iter().map(|e| e.title).collect())),
+        Ok(events) => Ok(Json(events.into_iter().map(|e| (e.id, e.title)).collect())),
         Err(_) => Err(Status::InternalServerError),
     }
 }
@@ -52,7 +52,6 @@ pub async fn delete_conference(db: &State<DbClient>, conf: ConferenceManageGuard
 #[derive(FromForm)]
 pub struct UpdateConference<'r> {
     title: &'r str,
-    info: &'r str,
     password: Option<&'r str>,
 
     start_ts: u64,
@@ -75,7 +74,6 @@ pub async fn update_conference(
 ) -> Status {
     let mut conf = conf.conference;
     conf.title = form.title.into();
-    conf.info = form.info.into();
     conf.password = form.password.map(|s| s.into());
     let chrono::LocalResult::Single(start_ts) = chrono::Utc.timestamp_opt(form.start_ts as i64, 0) else {
         return Status::InternalServerError;

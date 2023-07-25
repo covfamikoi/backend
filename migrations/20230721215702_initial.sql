@@ -10,7 +10,6 @@ create table conferences (
     id serial primary key,
 
     title text not null default 'unamed',
-    info text not null default 'no description',
     password text,
 
     start_ts timestamptz not null default now(),
